@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KangaSys — Device Monitoring</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <div class="brand">
+  <img
+    src="assets/kangasys-logo.png"
+    alt="KangaSys"
+    class="brand-logo"
+  />
+  <span class="brand-sub">Device Monitoring</span>
+</div>
+    <div class="nav-status">
+      <span class="dot" id="apiDot"></span>
+      <span id="apiStatusLabel">checking API…</span>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <span class="eyebrow">FACILITY OVERVIEW</span>
+  <h1 class="page-title">Devices, readings, and alerts</h1>
+  <p class="page-sub">
+    A small, self-contained monitoring service: manage the devices you care about,
+    watch their readings come in, and get flagged automatically the moment
+    something drifts outside its normal range.
+  </p>
+
+  <div class="tabs">
+    <button class="tab active" data-view="devices">
+      Devices <span class="tab-count" id="deviceCount">0</span>
+    </button>
+    <button class="tab" data-view="readings">
+      Readings
+    </button>
+    <button class="tab" data-view="alerts">
+      Alerts <span class="tab-count alert-count" id="alertCount">0</span>
+    </button>
+  </div>
+
+  <!-- DEVICES VIEW -->
+  <section id="view-devices" class="view active">
+    <div class="panel">
+      <span class="eyebrow">ADD A DEVICE</span>
+      <form id="deviceForm" class="form-grid">
+        <div>
+          <label for="deviceName">Name</label>
+          <input id="deviceName" name="name" placeholder="e.g. Server Room A - Temp" required />
+        </div>
+        <div>
+          <label for="deviceType">Type</label>
+          <select id="deviceType" name="type" required></select>
+        </div>
+        <div>
+          <label for="deviceStatus">Status</label>
+          <select id="deviceStatus" name="status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Add device →</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="deviceGrid" class="device-grid"></div>
+  </section>
+
+  <!-- READINGS VIEW -->
+  <section id="view-readings" class="view">
+    <div class="toolbar">
+      <div>
+        <label for="readingsDeviceSelect" style="margin-bottom:4px;">Device</label>
+        <select id="readingsDeviceSelect" style="min-width:260px;"></select>
+      </div>
+    </div>
+
+    <div class="panel slate" id="readingsPanel">
+      <span class="eyebrow" id="readingsRangeLabel">NORMAL RANGE</span>
+      <div class="card chart-wrap">
+        <svg class="chart" id="chartSvg" viewBox="0 0 700 220" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="toolbar">
+        <span class="eyebrow" style="margin:0;">SUBMIT A READING</span>
+      </div>
+      <form id="readingForm" class="form-grid">
+        <div>
+          <label for="readingValue">Value</label>
+          <input id="readingValue" type="number" step="any" placeholder="e.g. 22.4" required />
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Submit reading →</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top: 21px;">
+      <table>
+        <thead>
+          <tr><th>Timestamp</th><th>Value</th><th>Unit</th><th>Status</th></tr>
+        </thead>
+        <tbody id="readingsTableBody"></tbody>
+      </table>
+      <div id="readingsEmpty" class="empty-state" style="display:none;">No readings yet for this device.</div>
+    </div>
+  </section>
+
+  <!-- ALERTS VIEW -->
+  <section id="view-alerts" class="view">
+    <div class="tabs" style="border-bottom:none; margin-bottom: 14px;">
+      <button class="tab active" data-alert-filter="active">Active</button>
+      <button class="tab" data-alert-filter="resolved">Resolved</button>
+      <button class="tab" data-alert-filter="">All</button>
+    </div>
+    <div id="alertsList"></div>
+    <div id="alertsEmpty" class="empty-state" style="display:none;">No alerts here — everything's within range.</div>
+  </section>
+</div>
+
+<footer>KangaSys take-home — device monitoring, styled on the Ease Health design system.</footer>
+<div id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
